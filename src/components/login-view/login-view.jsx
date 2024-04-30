@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Form, Button } from "react-bootstrap";
 
 export const LoginView = ({ onLoggedIn }) => {
     const [username, setUsername] = useState("");
@@ -36,29 +37,36 @@ export const LoginView = ({ onLoggedIn }) => {
     }
 
     return (
-        <div>
-            <h1>Login</h1>
-            <form onSubmit={handleLogin}>
-                <label>
-                    Username:
-                    <input type="text"
+        <>
+            <Form className="form-login" onSubmit={handleLogin}>
+                <Form.Group controlId="formUsername">
+                    <Form.Label>Username:</Form.Label>
+                    <Form.Control
+                        className="form-control-input"
+                        type="text"
                         placeholder="username"
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         minLength={5}
-                        required />
-                </label>
-                <label>
-                    Password:
-                    <input type="password"
+                        required
+                    />
+                </Form.Group>
+                <Form.Group controlId="formPassword">
+                    <Form.Label>Password:</Form.Label>
+                    <Form.Control
+                        className="form-control-input"
+                        type="password"
                         placeholder="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
                         minLength={8}
-                        required />
-                </label>
-                <button type="submit">Submit</button>
-            </form>
-        </div>
+                        required
+                    />
+                </Form.Group>
+                <Button variant="outline-light" type="submit">
+                    Submit
+                </Button>
+            </Form>
+        </>
     )
 }

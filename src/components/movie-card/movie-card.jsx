@@ -1,15 +1,30 @@
 import PropTypes from "prop-types";
+import { Card, Button } from "react-bootstrap";
+import { SuitHeartFill } from "react-bootstrap-icons";
 
 export const MovieCard = ({ movie, onMovieClick }) => {
+    const sanitizeTitle = (title) => {
+        // Convert title to lowercase, replace spaces with underscores, and remove special characters
+        let sanitizedTitle = title.toLowerCase().replace(/\s/g, '_').replace(/[^\w\s]/gi, '');
+        return sanitizedTitle;
+    };
+
     return (
-        <div className="movie-card">
-            <div className="movie-card__item"
-                onClick={() => {
-                    onMovieClick(movie);
-                }}>
-                {movie.title}
-            </div>
-        </div>
+        <Card className="text-light bg-dark h-100 movie-card card" onClick={() => {
+            onMovieClick(movie);
+        }}>
+            <Card.Img variant="top" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movie.title)}.jpg`} alt="movie image" />
+            {/*
+           <Button variant="outline-light" className="fav-button" style={{ position: 'absolute', top: '5%', left: '93%', transform: 'translate(-50%, -50%)', fontSize: '25px' }}>
+                <SuitHeartFill />
+            </Button>
+    */}
+            <Card.Body>
+                <Card.Title>{movie.title}</Card.Title>
+                <Card.Text>{movie.description}</Card.Text>
+            </Card.Body>
+        </Card>
+
     )
 };
 

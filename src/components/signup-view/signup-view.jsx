@@ -1,11 +1,15 @@
 import { useState } from "react"
-import { Form, Button } from "react-bootstrap";
+import { Form, Button, Col } from "react-bootstrap";
+import { Link } from "react-router-dom";
+import logo from "../../img/logo.png";
+import { useNavigate } from "react-router-dom";
 
 export const SignupView = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
+    const navigate = useNavigate();
 
     const handleSignup = (e) => {
         e.preventDefault();
@@ -25,7 +29,7 @@ export const SignupView = () => {
         }).then((response) => {
             if (response.ok) {
                 alert('Signup successful');
-                window.location.reload();
+                navigate("/login");
             } else {
                 alert('Signup failed');
             }
@@ -35,6 +39,8 @@ export const SignupView = () => {
     return (
         <>
             <Form className="form-signup" onSubmit={handleSignup}>
+                <img id="logo-img" src={logo} alt="logo full moon with a pack of popcorn" />
+                <h1>Sign Up</h1>
                 <Form.Group controlId="formUsername">
                     <Form.Label>Username:</Form.Label>
                     <Form.Control
@@ -79,10 +85,15 @@ export const SignupView = () => {
                         onChange={(e) => setBirthday(e.target.value)}
                     />
                 </Form.Group>
-                <Button variant="outline-light" type="submit">
+                <Button className="custom-button" type="submit">
                     Submit
                 </Button>
             </Form>
+            <Col className="text-center" md={12}>
+                <Link to="/login">
+                    <Button variant="link">Already have an account?</Button>
+                </Link>
+            </Col>
         </>
     )
 

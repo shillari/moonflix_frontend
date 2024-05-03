@@ -4,14 +4,18 @@ import { MovieView } from "../movie-view/movie-view";
 import { LoginView } from "../login-view/login-view";
 import { SignupView } from "../signup-view/signup-view";
 import { CarouselView } from "../carousel-view/carousel-view";
-import { Row, Col, Button, Spinner } from "react-bootstrap";
-import { BoxArrowRight } from "react-bootstrap-icons";
+import { NavigationBar } from "../navigation-bar/navigation-bar";
+import { ProfileView } from "../profile-view/profile-view";
+import { Row, Col, Spinner } from "react-bootstrap";
+import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { SearchView } from "../search-view/search-view";
+import { FavoritesView } from "../favorites-view/favorites-view";
+import { ScrollTop } from "../scroll-top/scroll-top";
 
 const MainView = () => {
     const storedToken = localStorage.getItem("token");
     const storedUser = localStorage.getItem("user");
     const [movies, setMovies] = useState([]);
-    const [selectedMovie, setSelectedMovie] = useState(null);
     const [user, setUser] = useState(storedUser ? storedUser : null);
     const [token, setToken] = useState(storedToken ? storedToken : null);
     const [loading, setLoading] = useState(true);
@@ -23,93 +27,170 @@ const MainView = () => {
         }
 
         setLoading(true);
-        fetch("https://moonflix-97228dafe8d1.herokuapp.com/movies", {
-            headers: { Authorization: `Bearer ${token}` }
-        })
-            .then((response) => response.json())
-            .then((movies) => {
-                const moviesApi = movies.map((movie) => {
-                    return {
-                        id: movie._id,
-                        title: movie.title,
-                        description: movie.description,
-                        imagePath: movie.imagePath,
-                        year: movie.year,
-                        genre: movie.genre,
-                        director: movie.director,
-                        actors: movie.actors,
-                        featured: movie.featured
-                    }
-                });
-                setMovies(moviesApi);
-                setLoading(false);
+        const fetchMovies = async () => {
+            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/movies", {
+                headers: { Authorization: `Bearer ${token}` }
             })
+                .then((response) => response.json())
+                .then((movies) => {
+                    const moviesApi = movies.map((movie) => {
+                        return {
+                            id: movie._id,
+                            title: movie.title,
+                            description: movie.description,
+                            imagePath: movie.imagePath,
+                            year: movie.year,
+                            genre: movie.genre,
+                            director: movie.director,
+                            actors: movie.actors,
+                            featured: movie.featured
+                        }
+                    });
+                    setMovies(moviesApi);
+                })
+        }
+
+        fetchMovies();
+        setLoading(false);
     }, [token]);
 
     return (
-        <Row className="text-light justify-content-md-center">
-            {!user ? (
-                <>
-                    <Col md={8}>
-                        <h3>Login</h3>
-                        <LoginView onLoggedIn={(user, token) => { setUser(user); setToken(token) }} />
-                        <h3>Don't have an account?</h3>
-                        <SignupView />
-                    </Col>
-                </>
-            ) : loading ? (
-                <>
-                    <Spinner animation="border" role="status">
-                        <span className="visually-hidden">Loading...</span>
-                    </Spinner>
-                </>
-            ) : selectedMovie ? (
-                <>
-                    <Col className="w-100" md={12}>
-                        <MovieView movie={selectedMovie} onBackClick={() => setSelectedMovie(null)} />
-                    </Col>
-                    <hr />
-                    {movies.filter((movie) =>
-                        movie.title !== selectedMovie.title &&
-                        movie.genre.name === selectedMovie.genre.name).length > 0 && <h2>Similar movies</h2>}
-                    {movies.filter((movie) =>
-                        movie.title !== selectedMovie.title &&
-                        movie.genre.name === selectedMovie.genre.name).map((movie) =>
-                            <Col className="mb-3 mt-3" key={movie.id} md={4}>
-                                <MovieCard
-                                    movie={movie}
-                                    onMovieClick={(newSelectedMovie) => {
-                                        setSelectedMovie(movie);
-                                    }}
-                                />
-                            </Col>
-                        )}
-                </>
-            ) : movies.length === 0 ? (
-                <div>Nothing here :( </div>
-            ) : (
-                <>
-                    <Col>
-                        <Button variant="outline-light"
-                            onClick={() => {
-                                setUser(null);
-                                setToken(null);
-                                localStorage.clear();
-                            }}><BoxArrowRight /></Button>
-                    </Col>
-                    <CarouselView movies={movies} />
-                    {movies.map((movie) => (
-                        <Col className="mb-3 mt-3" key={movie.id} md={3}>
-                            <MovieCard
-                                movie={movie}
-                                onMovieClick={(newSelectedMovie) => {
-                                    setSelectedMovie(movie);
-                                }} />
-                        </Col>
-                    ))}
-                </>
-            )}
-        </Row>
+        <BrowserRouter>
+            <NavigationBar user={user}
+                onLogout={() => {
+                    setUser(null);
+                    setToken(null);
+                    localStorage.clear();
+                }} />
+
+            <Row className="text-light justify-content-md-center">
+                <ScrollTop>
+                    <Routes>
+                        <Route
+                            path="/signup"
+                            element={
+                                <>
+                                    {user ? (
+                                        <Navigate to="/" />
+                                    ) : (
+                                        <Col md={5}>
+                                            <SignupView />
+                                        </Col>
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/login"
+                            element={
+                                <>
+                                    {user ? (
+                                        <Navigate to="/" />
+                                    ) : (
+                                        <Col md={5} >
+                                            <LoginView onLoggedIn={(user, token) => { setUser(user); setToken(token) }} />
+                                        </Col>
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/profile"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : (
+                                        <ProfileView movies={movies}
+                                            onDelete={() => {
+                                                setUser(null);
+                                                setToken(null);
+                                                localStorage.clear();
+                                            }} />
+
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/movies/:id"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : loading ? (
+                                        <>
+                                            <Spinner animation="border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </Spinner>
+                                        </>
+                                    ) : movies.length === 0 ? (
+                                        <Col>Nothing here :( </Col>
+                                    ) : (
+                                        <>
+                                            <MovieView movies={movies} />
+                                        </>
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/search/:q"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : (
+                                        <SearchView movies={movies} />
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/favorites"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : (
+                                        <FavoritesView movies={movies} />
+                                    )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/"
+                            element={
+                                <>
+                                    {!user ? (
+                                        <Navigate to="/login" replace />
+                                    ) : loading ? (
+                                        <>
+                                            <Spinner animation="border" role="status">
+                                                <span className="visually-hidden">Loading...</span>
+                                            </Spinner>
+                                        </>
+                                    ) : movies.length === 0 ? (
+                                        <Col></Col>
+                                    ) : (
+                                        <>
+                                            <CarouselView movies={movies} />
+                                            {movies.map((movie) => (
+                                                <Col className="mb-3 mt-3" key={movie.id} md={3}>
+                                                    <MovieCard
+                                                        movie={movie}
+                                                    />
+                                                </Col>
+                                            ))}
+                                        </>
+                                    )}
+                                </>
+                            }
+                        />
+                    </Routes>
+                </ScrollTop>
+            </Row>
+        </BrowserRouter>
     )
 }
 export default MainView;

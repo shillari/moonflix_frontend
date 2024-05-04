@@ -8,9 +8,11 @@ import "./index.scss";
 // Main component (will eventually use all the others)
 const MoonFlixApplication = () => {
   return (
-    <Container className='text-light'>
-      <MainView />
-    </Container>
+    <>
+      <Container>
+        <MainView />
+      </Container>
+    </>
   );
 };
 

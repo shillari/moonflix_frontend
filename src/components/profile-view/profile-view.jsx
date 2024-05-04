@@ -47,6 +47,9 @@ export const ProfileView = ({ movies, onDelete }) => {
                     setEmail(userObj.email);
                     setBirthday(userObj.birthday ? new Date(userObj.birthday).toISOString().split('T')[0] : "");
                 })
+                .catch((err) => {
+                    console.log(err);
+                })
         }
         fetchUser();
     }, []);

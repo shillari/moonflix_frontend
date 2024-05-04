@@ -48,6 +48,9 @@ const MainView = () => {
                     });
                     setMovies(moviesApi);
                 })
+                .catch((err) => {
+                    console.log(err);
+                })
         }
 
         fetchMovies();

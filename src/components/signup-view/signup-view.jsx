@@ -33,6 +33,8 @@ export const SignupView = () => {
             } else {
                 alert('Signup failed');
             }
+        }).catch((err) => {
+            console.log(err);
         });
     }
 

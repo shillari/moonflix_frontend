@@ -29,6 +29,9 @@ export const MovieView = ({ movies }) => {
 
                 setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
+            })
+            .catch((err) => {
+                console.log(err);
             });
     }
 
@@ -47,6 +50,9 @@ export const MovieView = ({ movies }) => {
                 };
                 setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
+            })
+            .catch((err) => {
+                console.log(err);
             });
     }
 
@@ -65,6 +71,9 @@ export const MovieView = ({ movies }) => {
                 };
                 setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
+            })
+            .catch((err) => {
+                console.log(err);
             });
     }
 

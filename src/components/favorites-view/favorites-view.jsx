@@ -26,6 +26,7 @@ export const FavoritesView = ({ movies }) => {
                         setFavorites(userReturned.favoriteMovies);
                     }
                 }).catch((err) => {
+                    console.log(err);
                     setLoading(false);
                 })
         }

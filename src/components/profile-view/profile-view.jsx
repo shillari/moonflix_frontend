@@ -35,7 +35,7 @@ export const ProfileView = () => {
         }
 
         const fetchUser = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/" + encodeURIComponent(user), {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then((response) => response.json())
@@ -75,8 +75,7 @@ export const ProfileView = () => {
         }
 
         const updateUser = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/"
-                + encodeURIComponent(user), {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}`, {
                 method: "PUT",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -112,8 +111,7 @@ export const ProfileView = () => {
         }
 
         const updatePassword = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/"
-                + encodeURIComponent(user) + "/password", {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}/password`, {
                 method: "PUT",
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -146,8 +144,7 @@ export const ProfileView = () => {
         e.preventDefault();
 
         const deleteAction = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/"
-                + encodeURIComponent(user), {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}`, {
                 method: "DELETE",
                 headers: {
                     Authorization: `Bearer ${token}`,

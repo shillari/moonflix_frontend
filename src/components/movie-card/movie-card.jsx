@@ -14,7 +14,7 @@ export const MovieCard = ({ movie }) => {
     return (
         <Link className="link-card" as={Link} to={`/movies/${encodeURIComponent(movie.id)}`}>
             <Card className="text-light bg-dark h-100 movie-card card">
-                <Card.Img variant="top" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movie.title)}.jpg`} alt="movie image" />
+                <Card.Img variant="top" src={`${process.env.MOONFLIX_BACKEND}/img/${sanitizeTitle(movie.title)}.jpg`} alt="movie image" />
 
                 {/* 
                 <Button onClick={handleFavoriteButton} variant="outline-light"

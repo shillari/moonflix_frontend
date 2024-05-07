@@ -31,7 +31,7 @@ const MainView = () => {
 
         setLoading(true);
         const fetchMovies = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/movies", {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/movies`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then((response) => response.json())

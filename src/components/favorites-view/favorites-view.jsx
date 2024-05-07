@@ -21,7 +21,7 @@ export const FavoritesView = () => {
 
         setLoading(true);
         const fetchUser = async () => {
-            await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/" + encodeURIComponent(user), {
+            await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}`, {
                 headers: { Authorization: `Bearer ${token}` }
             })
                 .then((response) => response.json())

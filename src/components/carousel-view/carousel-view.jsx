@@ -13,19 +13,19 @@ export const CarouselView = () => {
     return (
         <Carousel>
             <Carousel.Item>
-                <img title={movies[0].title} className="img-caroussel w-100 h-100" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movies[0].title)}.jpg`} alt="movie image" />
+                <img title={movies[0].title} className="img-caroussel w-100 h-100" src={`${process.env.MOONFLIX_BACKEND}/img/${sanitizeTitle(movies[0].title)}.jpg`} alt="movie image" />
                 <Carousel.Caption>
                     <h3>{movies[0].title}</h3>
                 </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
-                <img title={movies[1].title} className="img-caroussel w-100 h-100" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movies[1].title)}.jpg`} alt="movie image" />
+                <img title={movies[1].title} className="img-caroussel w-100 h-100" src={`${process.env.MOONFLIX_BACKEND}/img/${sanitizeTitle(movies[1].title)}.jpg`} alt="movie image" />
                 <Carousel.Caption>
                     <h3>{movies[1].title}</h3>
                 </Carousel.Caption>
             </Carousel.Item>
             <Carousel.Item>
-                <img title={movies[2].title} className="img-caroussel w-100 h-100" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movies[2].title)}.jpg`} alt="movie image" />
+                <img title={movies[2].title} className="img-caroussel w-100 h-100" src={`${process.env.MOONFLIX_BACKEND}/img/${sanitizeTitle(movies[2].title)}.jpg`} alt="movie image" />
                 <Carousel.Caption>
                     <h3>{movies[2].title}</h3>
                 </Carousel.Caption>

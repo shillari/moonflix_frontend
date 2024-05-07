@@ -17,7 +17,7 @@ export const MovieView = () => {
     const navigate = useNavigate();
 
     const fetchUser = async () => {
-        await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/" + encodeURIComponent(user), {
+        await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}`, {
             method: "GET",
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -38,7 +38,7 @@ export const MovieView = () => {
     }
 
     const addFavorite = async () => {
-        await fetch(`https://moonflix-97228dafe8d1.herokuapp.com/users/${encodeURIComponent(user)}/movies/${encodeURIComponent(id)}`, {
+        await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}/movies/${encodeURIComponent(id)}`, {
             method: "POST",
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -59,7 +59,7 @@ export const MovieView = () => {
     }
 
     const removeFavorite = async () => {
-        await fetch(`https://moonflix-97228dafe8d1.herokuapp.com/users/${encodeURIComponent(user)}/movies/${encodeURIComponent(id)}`, {
+        await fetch(`${process.env.MOONFLIX_BACKEND}/users/${encodeURIComponent(user)}/movies/${encodeURIComponent(id)}`, {
             method: "DELETE",
             headers: { Authorization: `Bearer ${token}` }
         })
@@ -109,7 +109,7 @@ export const MovieView = () => {
         <>
             <Row>
                 <Col className="mb-3 mt-3" md={12}>
-                    <img title={movie.title} className="img-fluid rounded mx-auto d-block" src={`https://moonflix-97228dafe8d1.herokuapp.com/img/${sanitizeTitle(movie.title)}.jpg`} />
+                    <img title={movie.title} className="img-fluid rounded mx-auto d-block" src={`${process.env.MOONFLIX_BACKEND}/img/${sanitizeTitle(movie.title)}.jpg`} />
                 </Col>
                 <Col className="mb-3 mt-3" md={12}>
                     <Button className={favoriteMovie ? 'custom-button-fav favorite' : 'custom-button-fav'} onClick={handleFavoriteButton}>

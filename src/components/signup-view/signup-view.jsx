@@ -20,7 +20,7 @@ export const SignupView = () => {
             birthday: birthday
         }
 
-        fetch("https://moonflix-97228dafe8d1.herokuapp.com/users", {
+        fetch(`${process.env.MOONFLIX_BACKEND}/users`, {
             method: 'POST',
             body: JSON.stringify(data),
             headers: {

@@ -31,7 +31,7 @@ export const LoginView = () => {
             password: password
         }
 
-        fetch("https://moonflix-97228dafe8d1.herokuapp.com/login", {
+        fetch(`${process.env.MOONFLIX_BACKEND}/login`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

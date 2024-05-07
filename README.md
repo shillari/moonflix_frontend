@@ -11,3 +11,6 @@ Parcel is a fast, zero-configuration web application bundler that supports vario
 - [React](https://react.dev/): v18.3.1
 
 React is a popular open-source JavaScript library for building user interfaces. It provides a component-based architecture that promotes code reusability and simplifies the development of interactive and dynamic web applications. React's virtual DOM and efficient rendering engine contribute to its high performance. The combination of React and Parcel offers a powerful and efficient toolset for developing the client-side of moonflix, ensuring a responsive user experience.
+
+## Hosting
+The app is hosted on Netlify in the link: [Moonflix](https://main--moonflix-app.netlify.app)

@@ -1,9 +1,11 @@
 import { MovieCard } from "../movie-card/movie-card";
 import { useParams } from "react-router";
 import { Row, Col } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-export const SearchView = ({ movies }) => {
+export const SearchView = () => {
     const { q } = useParams();
+    const movies = useSelector((state) => state.movies.list);
     const matchMovies = movies.filter((m) => m.title.toLowerCase().includes(q.toLowerCase()));
 
     return (

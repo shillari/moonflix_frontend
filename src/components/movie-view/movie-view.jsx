@@ -5,13 +5,16 @@ import { useParams } from "react-router-dom";
 import { MovieCard } from "../movie-card/movie-card";
 import { CheckSquare, Square } from "react-bootstrap-icons";
 import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
-export const MovieView = ({ movies }) => {
+export const MovieView = () => {
     const { id } = useParams();
-    const user = localStorage.getItem("user");
-    const token = localStorage.getItem("token");
-    const [userLogged, setUserLogged] = useState(null);
+    const user = useSelector((state) => state.user.username);
+    const token = useSelector((state) => state.user.token);
+    const movies = useSelector((state) => state.movies.list);
     const [favoriteMovie, setFavoriteMovie] = useState(false);
+    const navigate = useNavigate();
 
     const fetchUser = async () => {
         await fetch("https://moonflix-97228dafe8d1.herokuapp.com/users/" + encodeURIComponent(user), {
@@ -26,12 +29,11 @@ export const MovieView = ({ movies }) => {
                     birthday: userReturned.birthday,
                     favoriteMovies: userReturned.favoriteMovies
                 };
-
-                setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
             })
             .catch((err) => {
                 console.log(err);
+                navigate("/error/" + 500);
             });
     }
 
@@ -48,11 +50,11 @@ export const MovieView = ({ movies }) => {
                     birthday: userReturned.birthday,
                     favoriteMovies: userReturned.favoriteMovies
                 };
-                setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
             })
             .catch((err) => {
                 console.log(err);
+                navigate("/error/" + 500);
             });
     }
 
@@ -69,11 +71,11 @@ export const MovieView = ({ movies }) => {
                     birthday: userReturned.birthday,
                     favoriteMovies: userReturned.favoriteMovies
                 };
-                setUserLogged(u);
                 setFavoriteMovie(userReturned.favoriteMovies.includes(id));
             })
             .catch((err) => {
                 console.log(err);
+                navigate("/error/" + 500);
             });
     }
 

@@ -35,6 +35,7 @@ export const SignupView = () => {
             }
         }).catch((err) => {
             console.log(err);
+            navigate("/error/" + 500);
         });
     }
 

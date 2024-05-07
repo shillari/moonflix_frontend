@@ -1,10 +1,14 @@
 import { useEffect, useState } from "react";
 import { Spinner, Row, Col } from "react-bootstrap";
 import { MovieCard } from "../movie-card/movie-card";
+import { useNavigate } from "react-router";
+import { useSelector } from "react-redux";
 
-export const FavoritesView = ({ movies }) => {
-    const token = localStorage.getItem("token");
-    const user = localStorage.getItem("user");
+export const FavoritesView = () => {
+    const token = useSelector((state) => state.user.token);
+    const user = useSelector((state) => state.user.username);
+    const movies = useSelector((state) => state.movies.list);
+    const navigate = useNavigate();
     const [favorites, setFavorites] = useState([]);
     const [loading, setLoading] = useState(true);
 
@@ -28,6 +32,7 @@ export const FavoritesView = ({ movies }) => {
                 }).catch((err) => {
                     console.log(err);
                     setLoading(false);
+                    navigate("/error/" + 500);
                 })
         }
         fetchUser();

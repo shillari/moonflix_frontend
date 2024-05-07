@@ -1,7 +1,10 @@
 import { createRoot } from 'react-dom/client';
 import MainView from './components/main-view/main-view';
 import { Container } from 'react-bootstrap';
-
+import { store, persistor } from "./redux/store";
+import { PersistGate } from 'redux-persist/integration/react';
+import { Provider } from "react-redux";
+import { LoadingView } from './components/loading-view/loading-view';
 // Import statement to indicate that you need to bundle `./index.scss`
 import "./index.scss";
 
@@ -9,9 +12,13 @@ import "./index.scss";
 const MoonFlixApplication = () => {
   return (
     <>
-      <Container>
-        <MainView />
-      </Container>
+      <Provider store={store}>
+        <PersistGate loading={<LoadingView />} persistor={persistor}>
+          <Container>
+            <MainView />
+          </Container>
+        </PersistGate>
+      </Provider>
     </>
   );
 };

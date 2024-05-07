@@ -9,16 +9,19 @@ import { ProfileView } from "../profile-view/profile-view";
 import { Row, Col, Spinner } from "react-bootstrap";
 import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
 import { SearchView } from "../search-view/search-view";
+import { ErrorView } from "../error-view/error-view";
 import { FavoritesView } from "../favorites-view/favorites-view";
 import { ScrollTop } from "../scroll-top/scroll-top";
+import { useSelector, useDispatch } from "react-redux";
+import { setMovies } from "../../redux/reducers/movies";
 
 const MainView = () => {
-    const storedToken = localStorage.getItem("token");
-    const storedUser = localStorage.getItem("user");
-    const [movies, setMovies] = useState([]);
-    const [user, setUser] = useState(storedUser ? storedUser : null);
-    const [token, setToken] = useState(storedToken ? storedToken : null);
+    const user = useSelector((state) => state.user.username);
+    const token = useSelector((state) => state.user.token);
+    const movies = useSelector((state) => state.movies.list);
     const [loading, setLoading] = useState(true);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (!token) {
@@ -46,7 +49,7 @@ const MainView = () => {
                             featured: movie.featured
                         }
                     });
-                    setMovies(moviesApi);
+                    dispatch(setMovies(moviesApi));
                 })
                 .catch((err) => {
                     console.log(err);
@@ -59,12 +62,7 @@ const MainView = () => {
 
     return (
         <BrowserRouter>
-            <NavigationBar user={user}
-                onLogout={() => {
-                    setUser(null);
-                    setToken(null);
-                    localStorage.clear();
-                }} />
+            <NavigationBar />
 
             <Row className="text-light justify-content-md-center">
                 <ScrollTop>
@@ -91,7 +89,7 @@ const MainView = () => {
                                         <Navigate to="/" />
                                     ) : (
                                         <Col md={5} >
-                                            <LoginView onLoggedIn={(user, token) => { setUser(user); setToken(token) }} />
+                                            <LoginView />
                                         </Col>
                                     )}
                                 </>
@@ -104,13 +102,7 @@ const MainView = () => {
                                     {!user ? (
                                         <Navigate to="/login" replace />
                                     ) : (
-                                        <ProfileView movies={movies}
-                                            onDelete={() => {
-                                                setUser(null);
-                                                setToken(null);
-                                                localStorage.clear();
-                                            }} />
-
+                                        <ProfileView />
                                     )}
                                 </>
                             }
@@ -131,7 +123,7 @@ const MainView = () => {
                                         <Col>Nothing here :( </Col>
                                     ) : (
                                         <>
-                                            <MovieView movies={movies} />
+                                            <MovieView />
                                         </>
                                     )}
                                 </>
@@ -144,7 +136,7 @@ const MainView = () => {
                                     {!user ? (
                                         <Navigate to="/login" replace />
                                     ) : (
-                                        <SearchView movies={movies} />
+                                        <SearchView />
                                     )}
                                 </>
                             }
@@ -156,7 +148,7 @@ const MainView = () => {
                                     {!user ? (
                                         <Navigate to="/login" replace />
                                     ) : (
-                                        <FavoritesView movies={movies} />
+                                        <FavoritesView />
                                     )}
                                 </>
                             }
@@ -177,7 +169,7 @@ const MainView = () => {
                                         <Col></Col>
                                     ) : (
                                         <>
-                                            <CarouselView movies={movies} />
+                                            <CarouselView />
                                             {movies.map((movie) => (
                                                 <Col className="mb-3 mt-3" key={movie.id} md={3}>
                                                     <MovieCard
@@ -187,6 +179,14 @@ const MainView = () => {
                                             ))}
                                         </>
                                     )}
+                                </>
+                            }
+                        />
+                        <Route
+                            path="/error/:err"
+                            element={
+                                <>
+                                    <ErrorView />
                                 </>
                             }
                         />

@@ -1,12 +1,17 @@
 import { useState, useEffect } from "react";
 import { Form, Button, Col, Alert } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "../../img/logo.png";
+import { setUsername, setToken } from "../../redux/reducers/user";
+import { useDispatch } from "react-redux";
 
-export const LoginView = ({ onLoggedIn }) => {
-    const [username, setUsername] = useState("");
+export const LoginView = () => {
+    const [userinput, setUserinput] = useState("");
     const [password, setPassword] = useState("");
+    const navigate = useNavigate();
     const [alert, setAlert] = useState(null);
+    const dispatch = useDispatch();
 
     // Function to hide the alert after a certain time
     useEffect(() => {
@@ -22,7 +27,7 @@ export const LoginView = ({ onLoggedIn }) => {
         e.preventDefault();
 
         const accessData = {
-            username: username,
+            username: userinput,
             password: password
         }
 
@@ -40,19 +45,18 @@ export const LoginView = ({ onLoggedIn }) => {
                 return response.json();
             })
             .then((userLogged) => {
-                console.log(userLogged);
                 if (userLogged.message && userLogged.message.includes('Incorrect password')) {
                     setAlert(<Alert key='warning' variant='warning' className='alert-fade'>Username/password invalid</Alert>);
                 }
 
                 if (userLogged) {
-                    localStorage.setItem("user", userLogged.user.username);
-                    localStorage.setItem("token", userLogged.token);
-                    onLoggedIn(userLogged.user.username, userLogged.token);
+                    dispatch(setUsername(userLogged.user));
+                    dispatch(setToken(userLogged));
                 }
             })
             .catch((err) => {
                 console.error(err);
+                navigate("/error/" + 500);
             })
     }
 
@@ -69,8 +73,8 @@ export const LoginView = ({ onLoggedIn }) => {
                             className="form-control-input"
                             type="text"
                             placeholder="username"
-                            value={username}
-                            onChange={(e) => setUsername(e.target.value)}
+                            value={userinput}
+                            onChange={(e) => setUserinput(e.target.value)}
                             minLength={5}
                             required
                         />

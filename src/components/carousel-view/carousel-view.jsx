@@ -1,6 +1,9 @@
 import { Carousel } from "react-bootstrap";
+import { useSelector } from "react-redux";
 
-export const CarouselView = ({ movies }) => {
+export const CarouselView = () => {
+    const movies = useSelector((state) => state.movies.list);
+
     const sanitizeTitle = (title) => {
         // Convert title to lowercase, replace spaces with underscores, and remove special characters
         let sanitizedTitle = title.toLowerCase().replace(/\s/g, '_').replace(/[^\w\s]/gi, '');

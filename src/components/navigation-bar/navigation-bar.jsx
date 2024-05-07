@@ -9,11 +9,15 @@ import logo from "../../img/lo.png";
 import { Link, useNavigate } from 'react-router-dom';
 import { Person, House } from 'react-bootstrap-icons';
 import { useState } from 'react';
+import { setUsername, setToken } from '../../redux/reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 
-export const NavigationBar = ({ user, onLogout }) => {
+export const NavigationBar = () => {
     const navigate = useNavigate();
     const [searchInput, setSearchInput] = useState('');
     const [showOffcanvas, setShowOffcanvas] = useState(false);
+    const dispatch = useDispatch();
+    const user = useSelector((state) => state.user.username);
 
     const handleToggleOffcanvas = () => {
         setShowOffcanvas(!showOffcanvas);
@@ -35,6 +39,11 @@ export const NavigationBar = ({ user, onLogout }) => {
             handleOffcanvasHide();
             navigate(`/search/${encodeURIComponent(searchInput)}`);
         }
+    }
+
+    const onLogout = () => {
+        dispatch(setUsername({ username: null }));
+        dispatch(setToken({ token: null }));
     }
 
     const handleLogout = () => {

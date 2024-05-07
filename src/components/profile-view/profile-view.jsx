@@ -1,18 +1,22 @@
 import React, { useState, useEffect } from 'react';
-import { Form, Button, Col, Nav, Tab, Row, Alert, Modal } from "react-bootstrap";
+import { Form, Button, Col, Nav, Tab, Alert, Modal } from "react-bootstrap";
+import { useNavigate } from 'react-router';
+import { setUsername, setToken } from '../../redux/reducers/user';
+import { useDispatch, useSelector } from 'react-redux';
 
-export const ProfileView = ({ movies, onDelete }) => {
-    const user = localStorage.getItem("user");
+export const ProfileView = () => {
+    const user = useSelector((state) => state.user.username);
+    const token = useSelector((state) => state.user.token);
     const [show, setShow] = useState(false);
-    const [username, setUsername] = useState('');
+    const [userinput, setUserinput] = useState('');
     const [email, setEmail] = useState('');
     const [birthday, setBirthday] = useState('');
     const [oldpassword, setOldpassword] = useState('');
     const [newpassword, setNewpassword] = useState('');
-    const token = localStorage.getItem("token");
     const [activeTab, setActiveTab] = useState('data');
-    const [userLogged, setUserLogged] = useState(null);
     const [alert, setAlert] = useState(null);
+    const navigate = useNavigate();
+    const dispatch = useDispatch();
 
     // Function to hide the alert after a certain time
     useEffect(() => {
@@ -42,13 +46,13 @@ export const ProfileView = ({ movies, onDelete }) => {
                         email: userReturned.email,
                         birthday: userReturned.birthday
                     };
-                    setUserLogged(userObj);
-                    setUsername(userObj.username);
+                    setUserinput(userObj.username);
                     setEmail(userObj.email);
                     setBirthday(userObj.birthday ? new Date(userObj.birthday).toISOString().split('T')[0] : "");
                 })
                 .catch((err) => {
                     console.log(err);
+                    navigate("/error/" + 500);
                 })
         }
         fetchUser();
@@ -57,10 +61,15 @@ export const ProfileView = ({ movies, onDelete }) => {
     const handleClose = () => setShow(false);
     const handleShow = () => setShow(true);
 
+    const onDelete = () => {
+        dispatch(setUsername({ username: null }));
+        dispatch(setToken({ token: null }));
+    }
+
     const handleUpdate = (e) => {
         e.preventDefault();
         const data = {
-            username: username,
+            username: userinput,
             email: email,
             birthday: birthday
         }
@@ -79,7 +88,7 @@ export const ProfileView = ({ movies, onDelete }) => {
                 .then((response) => response.json())
                 .then((userReturned) => {
                     if (userReturned) {
-                        localStorage.setItem("user", userReturned.username);
+                        dispatch(setUsername(userReturned));
                         console.log('User updated');
                         setAlert(<Alert key='success' variant='success' className='alert-fade'>User updated!</Alert>);
                     }
@@ -182,8 +191,8 @@ export const ProfileView = ({ movies, onDelete }) => {
                                         className="form-control-input"
                                         type="text"
                                         placeholder="username"
-                                        value={username}
-                                        onChange={(e) => setUsername(e.target.value)}
+                                        value={userinput}
+                                        onChange={(e) => setUserinput(e.target.value)}
                                         minLength={5}
                                         required
                                     />
